@@ -10,6 +10,11 @@
 
     <input type="text" v-model="variavel">
     {{ variavel }}
+
+    <input type="text" v-model="variavel2">
+    {{ variavel2 }}
+
+    <p>{{ parseInt(variavel) + parseInt(variavel2) }}</p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -18,10 +23,10 @@
 	new Vue({
 		el: '#app',
 		data: {
-			variavel: '',
+			variavel: 0,
+			variavel2: 0
 		}
 	})
 </script>
 </body>
-
 </html>
