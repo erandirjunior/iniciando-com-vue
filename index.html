@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js Campeonato Brasileiro</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+</head>
+<body>
+<div id="app" class="container">
+    <div class="row">
+        <h3>Campeonato Brasileiro</h3>
+    </div>
+
+    <input type="text" :value="gols" :id="gols + 'id'">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			gols: 3
+		}
+	})
+</script>
+</body>
+</html>
