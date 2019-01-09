@@ -23,41 +23,49 @@
         </div>
     </div>
 
-    <form action="" class="form-inline">
-        <input type="text" class="form-control col-sm-1" v-model="novoJogo.casa.gols">
-        {{ novoJogo.casa.time ? novoJogo.casa.time.nome : '' }}
-        <img class="escudo" :src="novoJogo.casa.time ? novoJogo.casa.time.escudo : ''" alt="">
-        <span>X</span>
-        <img class="escudo" :src="novoJogo.fora.time ? novoJogo.fora.time.escudo : ''" alt="">
-        {{ novoJogo.fora.time ? novoJogo.fora.time.nome : '' }}
-        <input type="text" class="form-control col-sm-1" v-model="novoJogo.fora.gols">
+    <br>
 
-        <button type="button" class="btn btn-primary" @click="fimJogo">Fim de Jogo</button>
-    </form>
+    <div class="row">
+        <div class="col-sm-12" v-if="visao != 'tabela'">
+            <form action="" class="form-inline">
+                <input type="text" class="form-control col-sm-1" v-model="novoJogo.casa.gols">
+                {{ novoJogo.casa.time ? novoJogo.casa.time.nome : '' }}
+                <img class="escudo" :src="novoJogo.casa.time ? novoJogo.casa.time.escudo : ''" alt="">
+                <span>X</span>
+                <img class="escudo" :src="novoJogo.fora.time ? novoJogo.fora.time.escudo : ''" alt="">
+                {{ novoJogo.fora.time ? novoJogo.fora.time.nome : '' }}
+                <input type="text" class="form-control col-sm-1" v-model="novoJogo.fora.gols">
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Pontos</th>
-                <th>GM</th>
-                <th>GS</th>
-                <th>Saldo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="time in times">
-                <td>
-                    <img class="escudo" :src="time.escudo" alt="">
-                    {{ time.nome }}
-                </td>
-                <td>{{ time.pontos }}</td>
-                <td>{{ time.gm }}</td>
-                <td>{{ time.gs }}</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+                <button type="button" class="btn btn-primary" @click="fimJogo">Fim de Jogo</button>
+            </form>
+        </div>
+        <div class="col-sm-12" v-else>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Pontos</th>
+                    <th>GM</th>
+                    <th>GS</th>
+                    <th>Saldo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="time in times">
+                    <td>
+                        <img class="escudo" :src="time.escudo" alt="">
+                        {{ time.nome }}
+                    </td>
+                    <td>{{ time.pontos }}</td>
+                    <td>{{ time.gm }}</td>
+                    <td>{{ time.gs }}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -76,6 +84,7 @@
 			if (this.foiEmpate(golsMarcados, golsSofridos)) {
 				this.empate(golsMarcados, golsSofridos)
 				timeVisitante.empate(golsMarcados, golsSofridos)
+                return
 			}
 
 			if (this.foiVitoria(golsMarcados, golsSofridos)) {
@@ -148,7 +157,8 @@
 					time: null,
 					gols: 0
 				}
-            }
+            },
+            visao: 'tabela'
 		},
         methods: {
 			showAlert() {
@@ -165,6 +175,7 @@
 				this.novoJogo.casa.gols = 0
                 this.novoJogo.fora.time = this.times[indiceFora]
 				this.novoJogo.fora.gols = 0
+                this.visao = 'placar'
             },
             fimJogo() {
 				const golsMarcados = parseInt(this.novoJogo.casa.gols)
@@ -173,6 +184,7 @@
                 const timeCasa = this.novoJogo.casa.time
 
                 timeCasa.fimJogo(timeFora, golsMarcados, golsSofridos)
+                this.visao = 'tabela'
             }
         }
 	})
