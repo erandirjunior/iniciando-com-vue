@@ -14,7 +14,7 @@
 <body>
 <div id="app" class="container">
     <div class="row">
-        <h3>Campeonato Brasileiro</h3>
+        <h1>Campeonato Brasileiro</h1>
     </div>
 
     <div class="row">
@@ -63,6 +63,18 @@
                 </tr>
                 </tbody>
             </table>
+
+            <h3>Times classificados para a Libertadores</h3>
+            <ul>
+                <li v-for="time in timesLibertadores"><img class="escudo" :src="time.escudo" alt="">
+                    {{ time.nome | ucwords }}</li>
+            </ul>
+
+            <h3>Times rebaixados</h3>
+            <ul>
+                <li v-for="time in timesRebaixados"><img class="escudo" :src="time.escudo" alt="">
+                    {{ time.nome | ucwords }}</li>
+            </ul>
         </div>
     </div>
 
@@ -160,6 +172,14 @@
             },
             visao: 'tabela'
 		},
+        computed: {
+		    timesLibertadores() {
+		    	return this.times.slice(0, 6)
+            },
+		    timesRebaixados() {
+		    	return this.times.slice(16)
+            }
+        },
         methods: {
 			showAlert() {
 				alert('Fim de Jogo')
