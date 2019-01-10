@@ -44,14 +44,16 @@
                 <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Pontos</th>
+                    <th>
+                        <a href="#" @click.prevent="ordenacao = ordenacao === 'desc' ? 'asc' : 'desc'">Pontos</a>
+                    </th>
                     <th>GM</th>
                     <th>GS</th>
                     <th>Saldo</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="time in times">
+                <tr v-for="time in timesOrdenados">
                     <td>
                         <img class="escudo" :src="time.escudo" alt="">
                         {{ time.nome | ucwords }}
@@ -81,7 +83,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
 <script>
     class Time {
     	constructor(nome, escudo) {
@@ -138,6 +140,7 @@
 		el: '#app',
 		data: {
 			gols: 3,
+			ordenacao: 'desc',
 			times: [
 				new Time('América MG', 'assets/america_mg_60x60.png'),
 				new Time('Atlético PR', 'assets/atletico-pr_60x60.png'),
@@ -178,6 +181,9 @@
             },
 		    timesRebaixados() {
 		    	return this.times.slice(16)
+            },
+            timesOrdenados() {
+		    	return _.orderBy(this.times, 'pontos', this.ordenacao)
             }
         },
         methods: {
