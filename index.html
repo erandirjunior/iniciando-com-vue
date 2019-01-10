@@ -44,12 +44,9 @@
                 <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>
-                        <a href="#" @click.prevent="ordenacao = ordenacao === 'desc' ? 'asc' : 'desc'">Pontos</a>
+                    <th v-for="(coluna, indice) in ordem.colunas">
+                        <a href="#" @click.prevent="ordenar(indice)">{{ coluna | ucwords }}</a>
                     </th>
-                    <th>GM</th>
-                    <th>GS</th>
-                    <th>Saldo</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -61,7 +58,8 @@
                     <td>{{ time.pontos }}</td>
                     <td>{{ time.gm }}</td>
                     <td>{{ time.gs }}</td>
-                    <td>{{ time | saldo }}</td>
+                    <!--<td>{{ time | saldo }}</td>-->
+                    <td>{{ time.saldo }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -92,6 +90,7 @@
             this.pontos = 0
             this.gm = 0
             this.gs = 0
+            this.saldo = 0
         }
 
 		fimJogo(timeVisitante, golsMarcados, golsSofridos) {
@@ -134,13 +133,17 @@
 			this.pontos += pontos
 			this.gm     += golsMarcados
 			this.gs     += golsSofridos
+            this.saldo  += this.gm - this.gs
 		}
     }
 	new Vue({
 		el: '#app',
 		data: {
 			gols: 3,
-			ordenacao: 'desc',
+			ordem: {
+				colunas: ['pontos', 'gm', 'gs', 'saldo'],
+                ordenacao: ['desc', 'desc', 'asc', 'desc']
+            },
 			times: [
 				new Time('América MG', 'assets/america_mg_60x60.png'),
 				new Time('Atlético PR', 'assets/atletico-pr_60x60.png'),
@@ -183,7 +186,7 @@
 		    	return this.times.slice(16)
             },
             timesOrdenados() {
-		    	return _.orderBy(this.times, 'pontos', this.ordenacao)
+		    	return _.orderBy(this.times, this.ordem.colunas, this.ordem.ordenacao)
             }
         },
         methods: {
@@ -211,6 +214,10 @@
 
                 timeCasa.fimJogo(timeFora, golsMarcados, golsSofridos)
                 this.visao = 'tabela'
+            },
+            ordenar(indice) {
+				// this.ordem.ordenacao[indice] = this.ordem.ordenacao[indice]  === 'desc' ? 'asc' : 'desc'
+                this.$set(this.ordem.ordenacao, indice, this.ordem.ordenacao[indice]  === 'desc' ? 'asc' : 'desc')
             }
         },
         filters: {
