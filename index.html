@@ -40,6 +40,7 @@
             </form>
         </div>
         <div class="col-sm-12" v-else>
+            <input type="text" class="form-control" v-model="busca">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -50,7 +51,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="time in timesOrdenados">
+                <tr v-for="time in timesFiltrados">
                     <td>
                         <img class="escudo" :src="time.escudo" alt="">
                         {{ time.nome | ucwords }}
@@ -176,7 +177,8 @@
 					gols: 0
 				}
             },
-            visao: 'tabela'
+            visao: 'tabela',
+            busca: ''
 		},
         computed: {
 		    timesLibertadores() {
@@ -185,8 +187,12 @@
 		    timesRebaixados() {
 		    	return this.times.slice(16)
             },
-            timesOrdenados() {
-		    	return _.orderBy(this.times, this.ordem.colunas, this.ordem.ordenacao)
+            timesFiltrados() {
+		    	const times = _.orderBy(this.times, this.ordem.colunas, this.ordem.ordenacao)
+
+                return _.filter(times, (time) => {
+                	return time.nome.toLowerCase().indexOf(this.busca.toLowerCase()) >= 0
+                })
             }
         },
         methods: {
